@@ -21,7 +21,6 @@
     </form>
   </div>
   <div class="video-container">
-
   </div>
 
 </template>
