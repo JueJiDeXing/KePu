@@ -7,9 +7,12 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@vercel/blob": "^0.19.0",
+    "@vercel/postgres": "^0.5.1",
     "axios": "^1.6.2",
     "core-js": "^3.8.3",
     "https-browserify": "^1.0.0",
+    "next.js": "^1.0.3",
     "vant": "^4.8.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",

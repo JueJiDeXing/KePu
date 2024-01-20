@@ -21,29 +21,67 @@
     </form>
   </div>
   <div class="video-container">
+
+    <div v-for="path in videos.paths" :key="path" class="video-item">
+      <video :src="path" controls></video>
+      <p>{{ path.split('/').pop() }}</p>
+    </div>
   </div>
 
 </template>
 <script>
-import {ref} from 'vue';
+import {reactive, ref} from "vue";
+import * as videoList from '../../../public/videos/videoList.json';
 
 export default {
   setup() {
-    console.log("setup")
-    const query = ref('');
+    const query = ref("");
+    const videos = reactive({
+      paths: [] // 视频路径数组
+    });
 
-    function onSearch(e) {
-      e.preventDefault();
-      console.log('onSearch', query.value);
-      // 这里可以编写你的搜索逻辑
+    function onSearch(event) {
+      event.preventDefault();
+      console.log("search");
+      const keyword = query.value;
+      console.log("videoList=", videoList);
+      videos.paths = getVideoInfo(videoList, keyword);
+      console.log("videos.path=", videos.paths);
+    }
+
+    function getVideoInfo(videoList, keyword, path = '/videos/', isIn = false,split='/') {
+      let res = [];
+      for (const category in videoList) {
+        if (!Object.prototype.hasOwnProperty.call(videoList, category) || category === 'default') continue;
+        if (isIn && category === 'videos') {
+          res = res.concat(path + videoList[category]);
+          continue;
+        }
+        let subVideos = null;
+        if(isIn&&typeof videoList[category] === 'object'){
+          subVideos = getVideoInfo(videoList[category], keyword, path + category + split, true);
+          res = res.concat(subVideos);
+          continue;
+        }
+        // isIn==false
+        if (category === 'videos') continue;
+        if (category === keyword) {
+          subVideos = getVideoInfo(videoList[category], keyword, path + category + split, true);
+        } else if (typeof videoList[category] === 'object') {
+          subVideos = getVideoInfo(videoList[category], keyword, path + category + split, false);
+        }
+        res = res.concat(subVideos);
+      }
+      return res;
     }
 
     return {
       query,
+      videos,
       onSearch
     };
   }
-}
+};
 </script>
 <style scoped lang="less">
 .form-container {
@@ -84,6 +122,9 @@ export default {
   }
 
 }
-
+video{
+  height: 300px;
+  width: 300px;
+}
 
 </style>
