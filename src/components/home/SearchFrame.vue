@@ -21,7 +21,6 @@
     </form>
   </div>
   <div class="video-container">
-
     <div v-for="path in videos.paths" :key="path" class="video-item">
       <video :src="path" controls></video>
       <p>{{ path.split('/').pop() }}</p>
@@ -39,17 +38,19 @@ export default {
     const videos = reactive({
       paths: [] // 视频路径数组
     });
+    getVideoInfo(videoList, "", "/videos/Default/", true);//初始放Default的
 
     function onSearch(event) {
       event.preventDefault();
       console.log("search");
       const keyword = query.value;
       console.log("videoList=", videoList);
+      videos.paths = [];//先清空
       videos.paths = getVideoInfo(videoList, keyword);
       console.log("videos.path=", videos.paths);
     }
 
-    function getVideoInfo(videoList, keyword, path = '/videos/', isIn = false,split='/') {
+    function getVideoInfo(videoList, keyword, path = '/videos/', isIn = false, split = '/') {
       let res = [];
       for (const category in videoList) {
         if (!Object.prototype.hasOwnProperty.call(videoList, category) || category === 'default') continue;
@@ -58,7 +59,7 @@ export default {
           continue;
         }
         let subVideos = null;
-        if(isIn&&typeof videoList[category] === 'object'){
+        if (isIn && typeof videoList[category] === 'object') {
           subVideos = getVideoInfo(videoList[category], keyword, path + category + split, true);
           res = res.concat(subVideos);
           continue;
@@ -122,9 +123,17 @@ export default {
   }
 
 }
-video{
-  height: 300px;
-  width: 300px;
+
+.video-container {
+  margin: auto;
+  width: 80%;
+  display: flex;
+}
+
+video {
+  margin: 20px;
+  height: 400px;
+  width: 400px;
 }
 
 </style>
