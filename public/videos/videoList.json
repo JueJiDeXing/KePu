@@ -1,1 +1,32 @@
-{"A":{"videos":["aaa.mp4"]},"Default":{"videos":["a1.mp4","a2.mp4","a3.mp4","a4.mp4","a5.mp4","a6.mp4","a7.mp4","a8.mp4"]},"分类1":{"分类1_1":{"videos":["ccc.mp4"]}},"分类2":{"videos":["bbb.mp4"],"分类2_1":{}}}
+{
+  "A": {
+    "videos": [
+      "aaa.mp4"
+    ]
+  },
+  "Default": {
+    "videos": [
+      "a1.mp4",
+      "a2.mp4",
+      "a3.mp4",
+      "a4.mp4",
+      "a5.mp4",
+      "a6.mp4",
+      "a7.mp4",
+      "a8.mp4"
+    ]
+  },
+  "分类1": {
+    "分类1_1": {
+      "videos": [
+        "ccc.mp4"
+      ]
+    }
+  },
+  "分类2": {
+    "videos": [
+      "bbb.mp4"
+    ],
+    "分类2_1": {}
+  }
+}
