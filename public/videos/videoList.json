@@ -1,7 +1,8 @@
 {
   "A": {
     "videos": [
-      "aaa.mp4"
+      "aaa.mp4",
+      "bbb.mp4"
     ]
   },
   "Default": {
