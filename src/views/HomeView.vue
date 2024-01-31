@@ -2,7 +2,7 @@
   <div class="home">
     <TopNav/>
     <SearchFrame/>
-    <RouterLink/>
+    <!--<RouterLink/>-->
   </div>
 </template>
 

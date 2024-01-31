@@ -11,6 +11,7 @@
     "@vercel/postgres": "^0.5.1",
     "axios": "^1.6.2",
     "core-js": "^3.8.3",
+    "element-plus": "^2.5.3",
     "https-browserify": "^1.0.0",
     "next.js": "^1.0.3",
     "vant": "^4.8.1",
