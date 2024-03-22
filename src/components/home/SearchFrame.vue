@@ -56,24 +56,57 @@ export default {
       console.log("videos.path=", videos.paths);
     }
 
-    function getVideoInfo(videoList, keyword, path = '/videos/', isIn = false, split = '/') {
+    //videoList:json对象  keyword:查找的关键词  只查找分类名
+    function getVideoInfoTemp(videoList, keyword, path = '/videos/', isIn = false, split = '/') {
       let res = [];
-      for (const category in videoList) {
+      for (const category in videoList) {//遍历子对象
         if (!Object.prototype.hasOwnProperty.call(videoList, category) || category === 'default') continue;
-        if (isIn && category === 'videos') {
+
+        if (isIn && category === 'videos') {//是搜索的分类下的videos,全部加入
           let v = Object.assign([], videoList[category]);
-          for (let i = 0; i < v.length; i++) v[i] = path + v[i];
+          for (let i = 0; i < v.length; i++) v[i] = path + v[i];//在前面添加路径
           res = res.concat(v);
           continue;
         }
-        if (category === 'videos') continue;
+        if (category === 'videos') return;//不是搜索的分类下的videos,匹配视频名称关键词
+
         let subVideos = null;
-        if ((isIn && typeof videoList[category] === 'object') || category === keyword) {
+        if ((isIn && typeof videoList[category] === 'object') || category.indexOf(keyword) !== -1) {//在分类下的对象,或者该分类匹配到关键词
           subVideos = getVideoInfo(videoList[category], keyword, path + category + split, true);
-        } else if (typeof videoList[category] === 'object') {
+        } else if (typeof videoList[category] === 'object') {//不在匹配下的分类,递归查询
           subVideos = getVideoInfo(videoList[category], keyword, path + category + split, false);
         }
-        res = res.concat(subVideos);
+        if (subVideos && subVideos.length) res = res.concat(subVideos);
+      }
+      return res;
+    }
+
+    //videoList:json对象  keyword:查找的关键词  分类和视频都能找
+    function getVideoInfo(videoList, keyword, path = '/videos/', isIn = false, split = '/') {
+      let res = [];
+      for (const category in videoList) {//遍历子对象
+        if (!Object.prototype.hasOwnProperty.call(videoList, category) || category === 'default') continue;
+
+        if (isIn && category === 'videos') {//是搜索的分类下的videos,全部加入
+          let v = Object.assign([], videoList[category]);
+          for (let i = 0; i < v.length; i++) v[i] = path + v[i];//在前面添加路径
+          res = res.concat(v);
+          continue;
+        }
+        if (category === 'videos') {//不是搜索的分类下的videos,匹配视频名称关键词
+          for (const video of videoList[category]) {
+            if (video.indexOf(keyword) !== -1) {//有匹配的关键词
+              res.push(path + video);
+            }
+          }
+        }
+        let subVideos = null;
+        if ((isIn && typeof videoList[category] === 'object') || category.indexOf(keyword) !== -1) {//在分类下的对象,或者该分类匹配到关键词
+          subVideos = getVideoInfo(videoList[category], keyword, path + category + split, true);
+        } else if (typeof videoList[category] === 'object') {//不在匹配下的分类,递归查询
+          subVideos = getVideoInfo(videoList[category], keyword, path + category + split, false);
+        }
+        if (subVideos && subVideos.length) res = res.concat(subVideos);
       }
       return res;
     }
@@ -168,11 +201,8 @@ export default {
           width: 80%; /* 让图标填充按钮的大小 */
           height: 80%;
         }
-
       }
-
     }
-
   }
 
   .video-container {

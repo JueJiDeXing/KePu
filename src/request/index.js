@@ -13,7 +13,7 @@ service.interceptors.response.use(
     },
     error => {
         alert("服务异常");
-        return result.data; // 返回一个包含错误信息的对象
+        return error.data; // 返回一个包含错误信息的对象
     }
 );
 export default service;
